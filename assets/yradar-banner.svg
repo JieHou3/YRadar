@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">YRadar</title><desc id="desc">Radar rings scanning Tesla official used inventory</desc>
+  <defs><linearGradient id="g" x1="0" x2="1"><stop stop-color="#090d18"/><stop offset="1" stop-color="#172746"/></linearGradient><linearGradient id="beam"><stop stop-color="#3ee6c4" stop-opacity=".72"/><stop offset="1" stop-color="#3ee6c4" stop-opacity="0"/></linearGradient></defs>
+  <rect width="1200" height="360" rx="28" fill="url(#g)"/>
+  <g transform="translate(205 180)" fill="none" stroke="#3ee6c4"><circle r="115" opacity=".2"/><circle r="78" opacity=".35"/><circle r="40" opacity=".55"/><path d="M0 0L120-70A139 139 0 0 1 132 31Z" fill="url(#beam)" stroke="none"/><circle r="7" fill="#3ee6c4"/></g>
+  <text x="390" y="165" fill="#f5f8ff" font-family="Inter,Segoe UI,sans-serif" font-size="84" font-weight="700">YRadar</text>
+  <text x="395" y="220" fill="#a9b8d4" font-family="Inter,Segoe UI,sans-serif" font-size="24">TESLA OFFICIAL USED-INVENTORY INTELLIGENCE</text>
+  <text x="395" y="263" fill="#3ee6c4" font-family="Inter,Segoe UI,sans-serif" font-size="20">Model Y + Model 3 · evidence · change alerts</text>
+</svg>

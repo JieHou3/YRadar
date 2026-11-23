@@ -95,6 +95,10 @@ See [Filters and evidence](docs/filters.md) for the decision table.
 
 For the storage, partial-scan, evidence, and notification design, see [Architecture](docs/architecture.md).
 
+## How inventory history affects desktop performance
+
+The desktop uses Tkinter to show current matches. SQLite keeps older listings and pending Telegram alerts across restarts. As history grows, the list still needs only the active cars, sorted by price. The benchmark runs that same SQL against synthetic history and lets you change how many cars are still active. A second experiment measures the cost of saving 100 VIN updates one transaction at a time. [Measurements, query plans and reproduction commands](docs/sqlite-benchmark.md)
+
 ## Default watch profile
 
 The editable starting profile is **Long Range AWD / White Interior / Clean**, model year 2023+, up to 75,000 miles. `Clean` means the Tesla query/report did not report accident or repaired status in fields YRadar observed. It is not proof of condition, title history, or absence of prior damage.

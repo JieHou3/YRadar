@@ -80,6 +80,10 @@ Windows 运行 `start.bat`；macOS/Linux 可直接运行 `bash start.sh`，或�
 
 存储、不完整扫描保护、证据优先级和通知设计见[架构说明](docs/architecture.zh-CN.md)。
 
+## 积累库存历史后，桌面列表还快吗？
+
+桌面端用 Tkinter 展示当前匹配的车，SQLite 则保留历史车源和待发的 Telegram 提醒。即使已经积累了十万条记录，买家打开列表时关心的仍是在售车辆及其价格顺序。基准工具用桌面版实际执行的 SQL 测量这一步，可以自行调整在售比例；另一个实验测量保存 100 辆车的价格变化时，逐辆提交和整批提交各需要多久。[实验结果与复跑方法](docs/sqlite-benchmark.md#中文摘要)
+
 ## 默认关注条件
 
 内置条件只是可编辑起点：**Long Range AWD / White Interior / Clean**，2023 年款起，里程不超过 75,000 英里。`Clean` 只表示 YRadar 观察到的 Tesla 查询/字段没有报告事故或维修状态；它不是车况、产权或无历史损伤的证明。

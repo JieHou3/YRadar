@@ -20,18 +20,7 @@ Its private predecessor helped the author buy a car they wanted. This public pac
 | 🚚 | **Transport fee with honest unknowns.** YRadar uses Tesla's direct fee when present or estimates from Tesla mileage bands. Show sticker plus fee or a combined estimate; unknown stays unknown. |
 | 📍 | **Straight-line distance.** Bundled Southern California coordinates provide great-circle distance from your pin. `92092` is an example ZIP; this is not driving distance. |
 
-```mermaid
-flowchart LR
-  A[Tesla official inventory] --> B[Complete scan]
-  B --> C[Listing and page evidence]
-  C --> D[Model-specific VIN heuristics]
-  D --> E[History and change detection]
-  E --> F[Durable outbox]
-  F --> G[Telegram / console]
-  B -->|403 or incomplete| H[Backoff and retry]
-  H --> A
-  H -. no disappearance decision .-> E
-```
+![Scan Tesla used inventory, analyze each listing, then send change alerts. An incomplete scan preserves existing listings and retries.](assets/flow-overview.svg)
 
 ## Quick start
 

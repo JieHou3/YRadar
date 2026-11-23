@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="383" viewBox="0 0 960 383" role="img" aria-labelledby="title description" xml:lang="en">
+  <title id="title">From shortlist to decision</title>
+  <desc id="description">Use your hard requirements to decide which alerts deserve a closer look.</desc>
+  <defs>
+    <linearGradient id="surface" x2="1" y2="1"><stop stop-color="#0a1426"/><stop offset="1" stop-color="#172541"/></linearGradient>
+    <marker id="arrow" markerWidth="6" markerHeight="7" refX="5.5" refY="3.5" orient="auto"><path d="M0 0L6 3.5 0 7Z" fill="#516d90"/></marker>
+  </defs>
+  <rect width="960" height="383" rx="21" fill="url(#surface)"/>
+  <g font-family="Inter, Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">
+  <text x="30" y="51" fill="#f2f6ff" font-size="34" font-weight="700">From shortlist to decision</text>
+  <text x="30" y="81" fill="#aebfda" font-size="19">Use your hard requirements to decide which alerts deserve a closer look.</text>
+  <path d="M30 100H930" stroke="#2e4265"/>
+  <rect x="30" y="119" width="260" height="154" rx="17" fill="#15233c" stroke="#344a6e"/>
+  <rect x="46" y="134" width="38" height="38" rx="10" fill="#3ee6c4" fill-opacity=".1"/>
+  <g transform="translate(53 141)" fill="none" stroke="#3ee6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10l3 3v13H4V7zM8 10l2 2 5-5m-7 9h8"/></g>
+  <text x="46" y="201" fill="#f2f6ff" font-size="24" font-weight="700">Define your criteria</text>
+  <text x="46" y="228" fill="#aebfda" font-size="19">Set the budget, model</text>
+  <text x="46" y="251" fill="#aebfda" font-size="19">and must-have options.</text>
+  <rect x="350" y="119" width="260" height="154" rx="17" fill="#15233c" stroke="#344a6e"/>
+  <rect x="366" y="134" width="38" height="38" rx="10" fill="#9cbcff" fill-opacity=".1"/>
+  <g transform="translate(373 141)" fill="none" stroke="#9cbcff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 18h8m-5 3h2M5 16c2-2 2-3 2-6a5 5 0 0 1 10 0c0 3 0 4 2 6z"/></g>
+  <text x="366" y="201" fill="#f2f6ff" font-size="24" font-weight="700">Review matches</text>
+  <text x="366" y="228" fill="#aebfda" font-size="19">Watch Tesla inventory.</text>
+  <text x="366" y="251" fill="#aebfda" font-size="19">Check fees and evidence.</text>
+  <rect x="670" y="119" width="260" height="154" rx="17" fill="#15233c" stroke="#344a6e"/>
+  <rect x="686" y="134" width="38" height="38" rx="10" fill="#3ee6c4" fill-opacity=".1"/>
+  <g transform="translate(693 141)" fill="none" stroke="#3ee6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="5"/><path d="m14 14 5 5"/></g>
+  <text x="686" y="201" fill="#f2f6ff" font-size="24" font-weight="700">Verify the car</text>
+  <text x="686" y="228" fill="#aebfda" font-size="19">Check the listing terms</text>
+  <text x="686" y="251" fill="#aebfda" font-size="19">and inspect at pickup.</text>
+  <path d="M299 186H341" stroke="#516d90" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M619 186H661" stroke="#516d90" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M800 274v17H250v14" fill="none" stroke="#516d90" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M710 291v14" stroke="#516d90" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="30" y="305" width="440" height="60" rx="12" fill="#111f34" stroke="#3c5274"/>
+  <rect x="40" y="316" width="38" height="38" rx="10" fill="#3ee6c4" fill-opacity=".1"/>
+  <g transform="translate(47 323)" fill="none" stroke="#3ee6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></g>
+  <text x="89" y="330" fill="#3ee6c4" font-size="20" font-weight="700">Fits your requirements</text>
+  <text x="89" y="351" fill="#aebfda" font-size="17">Decide with the facts you verified.</text>
+  <rect x="490" y="305" width="440" height="60" rx="12" fill="#111f34" stroke="#3c5274"/>
+  <rect x="500" y="316" width="38" height="38" rx="10" fill="#ffc987" fill-opacity=".1"/>
+  <g transform="translate(507 323)" fill="none" stroke="#ffc987" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m12 12 7-7"/></g>
+  <text x="549" y="330" fill="#ffc987" font-size="20" font-weight="700">Still unsure?</text>
+  <text x="549" y="351" fill="#aebfda" font-size="17">Keep watching for the next match.</text>
+  </g>
+</svg>

@@ -136,16 +136,6 @@ Bring the current listing/order details and inspect in safe, normal viewing cond
 
 Use three columns for the final comparison: **confirmed**, **likely**, and **unknown**. Price the known costs, list the unknown costs, and decide which unknowns must be resolved before ordering or pickup.
 
-```mermaid
-flowchart LR
-  A[Set requirements and budget] --> B[Run offline demo]
-  B --> C[Monitor official inventory]
-  C --> D[Read evidence and unknowns]
-  D --> E[Verify Tesla page and terms]
-  E --> F[Inspect safely at pickup]
-  F --> G{Requirements met?}
-  G -->|yes| H[Decide]
-  G -->|no or unresolved| C
-```
+![Define criteria, review inventory matches, then verify the car and purchase terms. Decide if it fits or keep watching.](../assets/flow-buyer.svg)
 
 The goal is not to win every alert. It is to recognize the right car quickly, understand what is known, and avoid paying for an assumption.

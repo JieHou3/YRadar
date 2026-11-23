@@ -4,20 +4,7 @@
 
 YRadar 是本地单进程库存监控工具。工程目标是在上游页面或通知渠道不可靠时，仍保存可信的库存状态。
 
-```mermaid
-flowchart LR
-  A[调度器 / CLI] --> B[Chrome CDP 抓取]
-  B --> C[按车型标准化]
-  C --> D[证据解析]
-  D --> E[SQLite 库存历史]
-  E --> F[变化事件]
-  F --> G[SQLite 待发队列]
-  G --> H[Telegram]
-  G --> I[控制台]
-  B -->|不完整 / 受阻| J[退避状态]
-  J --> A
-  J -. 保护缺失计数 .-> E
-```
+![Chrome 读取库存，标准化记录在 SQLite 中对比，待发提醒送至 Telegram 或控制台。扫描不完整时暂停累计缺失次数。](../assets/flow-pipeline.zh-CN.svg)
 
 ## 扫描生命周期
 
@@ -45,16 +32,7 @@ flowchart LR
 
 每个硬件/配置结论都应回答：值是什么、来源是什么、可信状态是什么。
 
-```mermaid
-flowchart TD
-  P{有页面直接证据?} -->|是| C[confirmed / page]
-  P -->|否| M{该车型有适用规则?}
-  M -->|是| L[likely / VIN heuristic + reason]
-  M -->|否| U[unknown]
-  C --> R[标准化记录]
-  L --> R
-  U --> R
-```
+![有明确页面证据时标为已确认，只有适用 VIN 规则时标为推断，证据不足或冲突时标为未知。](../assets/flow-evidence.zh-CN.svg)
 
 解析器不得把 Model Y 的 2023 流水号阈值用于 Model 3。VIN `S` 只确认 2025 年款，不能单独确认硬件。直接证据冲突时应显示冲突，而非用启发式静默覆盖。
 

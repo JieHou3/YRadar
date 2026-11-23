@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="410" viewBox="0 0 960 410" role="img" aria-labelledby="title description" xml:lang="zh">
+  <title id="title">从车源到提醒</title>
+  <desc id="description">YRadar 定时检查 Tesla 官方二手车源，并推送变化。</desc>
+  <defs>
+    <linearGradient id="surface" x2="1" y2="1"><stop stop-color="#0a1426"/><stop offset="1" stop-color="#172541"/></linearGradient>
+    <marker id="arrow" markerWidth="6" markerHeight="7" refX="5.5" refY="3.5" orient="auto"><path d="M0 0L6 3.5 0 7Z" fill="#516d90"/></marker>
+  </defs>
+  <rect width="960" height="410" rx="21" fill="url(#surface)"/>
+  <g font-family="Inter, Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">
+  <text x="30" y="51" fill="#f2f6ff" font-size="34" font-weight="700">从车源到提醒</text>
+  <text x="30" y="81" fill="#aebfda" font-size="19">YRadar 定时检查 Tesla 官方二手车源，并推送变化。</text>
+  <path d="M30 100H930" stroke="#2e4265"/>
+  <rect x="30" y="119" width="260" height="154" rx="17" fill="#15233c" stroke="#344a6e"/>
+  <rect x="46" y="134" width="38" height="38" rx="10" fill="#3ee6c4" fill-opacity=".1"/>
+  <g transform="translate(53 141)" fill="none" stroke="#3ee6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="m12 12 7-7"/></g>
+  <text x="46" y="201" fill="#f2f6ff" font-size="24" font-weight="700">扫描官方库存</text>
+  <text x="46" y="228" fill="#aebfda" font-size="19">支持 Model Y 和 Model 3</text>
+  <text x="46" y="251" fill="#aebfda" font-size="19">按设定间隔运行</text>
+  <rect x="350" y="119" width="260" height="154" rx="17" fill="#15233c" stroke="#344a6e"/>
+  <rect x="366" y="134" width="38" height="38" rx="10" fill="#9cbcff" fill-opacity=".1"/>
+  <g transform="translate(373 141)" fill="none" stroke="#9cbcff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M8 9h8M8 13h5"/></g>
+  <text x="366" y="201" fill="#f2f6ff" font-size="24" font-weight="700">分析车源配置</text>
+  <text x="366" y="228" fill="#aebfda" font-size="19">结合网页证据和 VIN</text>
+  <text x="366" y="251" fill="#aebfda" font-size="19">补充价格、运费和距离</text>
+  <rect x="670" y="119" width="260" height="154" rx="17" fill="#15233c" stroke="#344a6e"/>
+  <rect x="686" y="134" width="38" height="38" rx="10" fill="#3ee6c4" fill-opacity=".1"/>
+  <g transform="translate(693 141)" fill="none" stroke="#3ee6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 18h8m-5 3h2M5 16c2-2 2-3 2-6a5 5 0 0 1 10 0c0 3 0 4 2 6z"/></g>
+  <text x="686" y="201" fill="#f2f6ff" font-size="24" font-weight="700">推送车源变化</text>
+  <text x="686" y="228" fill="#aebfda" font-size="19">通过 Telegram 提醒</text>
+  <text x="686" y="251" fill="#aebfda" font-size="19">新车源、降价和重新上架</text>
+  <path d="M299 186H341" stroke="#516d90" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M619 186H661" stroke="#516d90" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="30" y="292" width="900" height="96" rx="17" fill="#25243b" stroke="#5d4a4d"/>
+  <rect x="47" y="308" width="38" height="38" rx="10" fill="#ffc987" fill-opacity=".1"/>
+  <g transform="translate(54 315)" fill="none" stroke="#ffc987" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 7 3v5c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="m9 11 2 2 4-4"/></g>
+  <text x="101" y="328" fill="#ffc987" font-size="22" font-weight="700">遇到 403 或扫描不完整</text>
+  <text x="101" y="353" fill="#aebfda" font-size="18">保留已找到的车源，暂停后自动重试。</text>
+  <text x="101" y="375" fill="#aebfda" font-size="18">不会因为这一轮未扫到而判定车源下架。</text>
+  </g>
+</svg>

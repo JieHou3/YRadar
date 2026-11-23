@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="526" viewBox="0 0 960 526" role="img" aria-labelledby="title description" xml:lang="zh">
+  <title id="title">库存扫描与通知</title>
+  <desc id="description">独立 Chrome 会话读取库存，SQLite 记录变化并保存待发提醒。</desc>
+  <defs>
+    <linearGradient id="surface" x2="1" y2="1"><stop stop-color="#0a1426"/><stop offset="1" stop-color="#172541"/></linearGradient>
+    <marker id="arrow" markerWidth="6" markerHeight="7" refX="5.5" refY="3.5" orient="auto"><path d="M0 0L6 3.5 0 7Z" fill="#516d90"/></marker>
+  </defs>
+  <rect width="960" height="526" rx="21" fill="url(#surface)"/>
+  <g font-family="Inter, Segoe UI, Microsoft YaHei, PingFang SC, Noto Sans CJK SC, sans-serif">
+  <text x="30" y="51" fill="#f2f6ff" font-size="34" font-weight="700">库存扫描与通知</text>
+  <text x="30" y="81" fill="#aebfda" font-size="19">独立 Chrome 会话读取库存，SQLite 记录变化并保存待发提醒。</text>
+  <path d="M30 100H930" stroke="#2e4265"/>
+  <rect x="30" y="119" width="260" height="154" rx="17" fill="#15233c" stroke="#344a6e"/>
+  <rect x="46" y="134" width="38" height="38" rx="10" fill="#3ee6c4" fill-opacity=".1"/>
+  <g transform="translate(53 141)" fill="none" stroke="#3ee6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 7v6l4 2"/></g>
+  <text x="46" y="201" fill="#f2f6ff" font-size="24" font-weight="700">用 Chrome 扫描</text>
+  <text x="46" y="228" fill="#aebfda" font-size="19">定时运行或手动单次扫描</text>
+  <text x="46" y="251" fill="#aebfda" font-size="19">读取 Tesla 官方库存</text>
+  <rect x="350" y="119" width="260" height="154" rx="17" fill="#15233c" stroke="#344a6e"/>
+  <rect x="366" y="134" width="38" height="38" rx="10" fill="#9cbcff" fill-opacity=".1"/>
+  <g transform="translate(373 141)" fill="none" stroke="#9cbcff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="14" rx="3"/><path d="M8 9h8M8 13h5"/></g>
+  <text x="366" y="201" fill="#f2f6ff" font-size="24" font-weight="700">统一车源字段</text>
+  <text x="366" y="228" fill="#aebfda" font-size="19">按车型整理配置与选项</text>
+  <text x="366" y="251" fill="#aebfda" font-size="19">页面证据优先于 VIN 推断</text>
+  <rect x="670" y="119" width="260" height="154" rx="17" fill="#15233c" stroke="#344a6e"/>
+  <rect x="686" y="134" width="38" height="38" rx="10" fill="#3ee6c4" fill-opacity=".1"/>
+  <g transform="translate(693 141)" fill="none" stroke="#3ee6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 4 14 4 14 0V6M5 12c0 4 14 4 14 0"/></g>
+  <text x="686" y="201" fill="#f2f6ff" font-size="24" font-weight="700">对比 SQLite 记录</text>
+  <text x="686" y="228" fill="#aebfda" font-size="19">保存本轮看到的车源</text>
+  <text x="686" y="251" fill="#aebfda" font-size="19">符合规则的变化进入队列</text>
+  <path d="M299 186H341" stroke="#516d90" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M619 186H661" stroke="#516d90" stroke-width="2" marker-end="url(#arrow)"/>
+  <path d="M800 274v23" stroke="#516d90" stroke-width="2" marker-end="url(#arrow)"/>
+  <rect x="30" y="299" width="900" height="96" rx="17" fill="#102b38" stroke="#306370"/>
+  <rect x="47" y="315" width="38" height="38" rx="10" fill="#3ee6c4" fill-opacity=".1"/>
+  <g transform="translate(54 322)" fill="none" stroke="#3ee6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 18h8m-5 3h2M5 16c2-2 2-3 2-6a5 5 0 0 1 10 0c0 3 0 4 2 6z"/></g>
+  <text x="101" y="335" fill="#3ee6c4" font-size="22" font-weight="700">发送待发提醒</text>
+  <text x="101" y="360" fill="#aebfda" font-size="18">Telegram 或本地控制台</text>
+  <text x="101" y="382" fill="#aebfda" font-size="18">发送失败则留在队列等待重试</text>
+  <rect x="30" y="412" width="900" height="96" rx="17" fill="#25243b" stroke="#5d4a4d"/>
+  <rect x="47" y="428" width="38" height="38" rx="10" fill="#ffc987" fill-opacity=".1"/>
+  <g transform="translate(54 435)" fill="none" stroke="#ffc987" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 7 3v5c0 4-3 7-7 9-4-2-7-5-7-9V6z"/><path d="m9 11 2 2 4-4"/></g>
+  <text x="101" y="448" fill="#ffc987" font-size="22" font-weight="700">扫描不完整或受阻</text>
+  <text x="101" y="473" fill="#aebfda" font-size="18">保留已观察到的车源，暂停累计缺失次数。</text>
+  <text x="101" y="495" fill="#aebfda" font-size="18">退避后再进行下一轮扫描。</text>
+  </g>
+</svg>

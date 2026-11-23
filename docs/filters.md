@@ -10,17 +10,7 @@ YRadar separates observation from inference. A Tesla page/API value is `page`; a
 | `likely` | Model-specific heuristic with a reason | Across Model Y and Model 3 |
 | `unknown` | Evidence missing or conflicting | Zero, absent, or false |
 
-```mermaid
-flowchart TD
-  A[Candidate listing] --> B{Direct page evidence?}
-  B -->|yes| C[Use page value + source]
-  B -->|no| D{Model-specific rule applies?}
-  D -->|yes| E[likely + reason]
-  D -->|no| F[unknown]
-  C --> G[User filters]
-  E --> G
-  F --> G
-```
+![Configuration evidence goes from direct listing data to applicable VIN rules. Missing or conflicting evidence stays unknown.](../assets/flow-evidence.svg)
 
 ## Default profile
 

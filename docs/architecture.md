@@ -4,20 +4,7 @@
 
 YRadar is a local, single-process inventory monitor. Its engineering goal is to preserve trustworthy state when the upstream page or a notification channel is unreliable.
 
-```mermaid
-flowchart LR
-  A[Scheduler / CLI] --> B[Chrome CDP fetch]
-  B --> C[Model-specific normalization]
-  C --> D[Evidence resolver]
-  D --> E[SQLite inventory history]
-  E --> F[Change events]
-  F --> G[SQLite outbox]
-  G --> H[Telegram]
-  G --> I[Console]
-  B -->|partial / blocked| J[Backoff state]
-  J --> A
-  J -. protects miss counters .-> E
-```
+![Chrome reads inventory, normalized records are compared in SQLite, and queued alerts go to Telegram or the console. Incomplete scans hold miss counters.](../assets/flow-pipeline.svg)
 
 ## Scan lifecycle
 
@@ -45,16 +32,7 @@ This makes a block noisy but avoids turning a network failure into a fleet-wide 
 
 Every hardware/configuration conclusion should answer three questions: what value, from which source, and with what confidence.
 
-```mermaid
-flowchart TD
-  P{Direct page evidence?} -->|yes| C[confirmed / page]
-  P -->|no| M{Rule valid for this model?}
-  M -->|yes| L[likely / VIN heuristic + reason]
-  M -->|no| U[unknown]
-  C --> R[Normalized record]
-  L --> R
-  U --> R
-```
+![Direct listing evidence gives a confirmed result. A matching VIN rule gives a likely result. Insufficient or conflicting evidence stays unknown.](../assets/flow-evidence.svg)
 
 The resolver must not reuse Model Y 2023 serial thresholds for Model 3. Model year code `S` confirms 2025 model year, not hardware by itself. Conflicting direct evidence should be visible rather than silently replaced by a heuristic.
 

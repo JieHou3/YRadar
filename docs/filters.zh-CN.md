@@ -10,6 +10,8 @@ YRadar 把观察与推断分开：Tesla 页面/API 是 `page`，VIN 解码是 `v
 | `likely` | 有适用车型规则并附理由 | 在 Model Y 与 Model 3 间混用规则 |
 | `unknown` | 缺少证据或证据冲突 | 当成 0、否或免费 |
 
+![配置判断先用页面证据，其次用适用的 VIN 规则，证据缺失或冲突时保留未知。](../assets/flow-evidence.zh-CN.svg)
+
 ## 默认条件
 
 默认值只是可编辑起点：`my,m3`、2023 年款起、≤75,000 英里，以及 **Long Range AWD / White Interior / Clean** 关注标签。

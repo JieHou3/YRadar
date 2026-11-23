@@ -153,7 +153,7 @@ def _accumulate_today_drop(cursor, vin, old_price, new_price):
     )
 
 
-def is_new_or_price_dropped(vehicle, queue_alert=False):
+def is_new_or_price_dropped(vehicle, queue_alert=False, match_rule=None):
     """
     Detect a new listing or a sticker-price drop.
     Returns: (should_notify, status_type, old_price)
@@ -193,6 +193,11 @@ def is_new_or_price_dropped(vehicle, queue_alert=False):
         return True, "new", None
 
     old_price, was_active, sold_at = row
+    newly_matches = False
+    if match_rule and queue_alert and was_active and price >= old_price:
+        cursor.execute("SELECT * FROM vehicles WHERE vin = ?", (vin,))
+        fields = [column[0] for column in cursor.description]
+        newly_matches = not match_rule(dict(zip(fields, cursor.fetchone())))
     if not was_active:
         # Was marked gone, now back: restore in-stock first (keep first_seen)
         cursor.execute("""
@@ -256,6 +261,12 @@ def is_new_or_price_dropped(vehicle, queue_alert=False):
         is_repaired, est_range, transport_fee, wheel_inches, seat_count, vin,
     ))
     _update_vehicle_details(cursor, vin, vehicle)
+
+    if newly_matches:
+        _enqueue_alert_cursor(cursor, vehicle, 'match', old_price, now)
+        conn.commit()
+        conn.close()
+        return True, 'match', old_price
 
     if price < old_price:
         _accumulate_today_drop(cursor, vin, old_price, price)

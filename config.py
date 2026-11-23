@@ -1,5 +1,7 @@
 """YRadar configuration. Secrets come from environment / .env — never commit tokens."""
 import os
+import json
+from buyer_search import BuyerSearch
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -34,6 +36,9 @@ def _env_bool(name, default=False):
     return raw in ('1', 'true', 'yes', 'on')
 
 
+_buyer_settings = os.environ.get('YRADAR_BUYER_SEARCH')
+BUYER_SEARCH = BuyerSearch(**json.loads(_buyer_settings)) if _buyer_settings else None
+
 # --- Search center (example: La Jolla, CA 92092) ---
 def _parse_models(raw):
     aliases = {'my': 'my', 'y': 'my', 'modely': 'my',
@@ -67,7 +72,7 @@ WATCH_MAX_PRICE = _env_int('WATCH_MAX_PRICE', 38000)
 FOCUS_MAX_PRICE = _env_int('FOCUS_MAX_PRICE', 33000)  # Long Range + HW4
 HW4_MAX_PRICE = _env_int('HW4_MAX_PRICE', 32000)
 BASE_MAX_PRICE = _env_int('BASE_MAX_PRICE', 32000)
-TESLA_FETCH_MAX_PRICE = max(WATCH_MAX_PRICE, FOCUS_MAX_PRICE, HW4_MAX_PRICE, BASE_MAX_PRICE)
+TESLA_FETCH_MAX_PRICE = BUYER_SEARCH.budget if BUYER_SEARCH else max(WATCH_MAX_PRICE, FOCUS_MAX_PRICE, HW4_MAX_PRICE, BASE_MAX_PRICE)
 
 # Backward-compatible names used by the fetcher
 TESLA_FAVORITE_MAX_PRICE = WATCH_MAX_PRICE
@@ -118,7 +123,9 @@ TESLA_SOLD_MISS_COUNT = max(2, _env_int('TESLA_SOLD_MISS_COUNT', 2))
 TESLA_SOLD_MISS_MIN_HOURS = 0
 RELIST_NOTIFY_MIN_HOURS = 0
 
-DB_PATH = os.path.join(CURRENT_DIR, 'vehicles.db')
+STATE_DIR = (os.path.join(CURRENT_DIR, '.yradar-local', BUYER_SEARCH.state_key())
+             if BUYER_SEARCH else CURRENT_DIR)
+DB_PATH = os.path.join(STATE_DIR, 'vehicles.db')
 POLL_INTERVAL = TESLA_INTERVAL_MINS * 60
 
 

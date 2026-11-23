@@ -22,6 +22,16 @@ Its private predecessor helped the author buy a car they wanted. This public pac
 
 ![Scan Tesla used inventory, analyze each listing, then send change alerts. An incomplete scan preserves existing listings and retries.](assets/flow-overview.svg)
 
+## Desktop app
+
+![YRadar desktop showing search criteria, two fictional matches and Model Y hardware evidence](assets/desktop-preview.png)
+
+After installing the dependencies below, run `python desktop.py` (Windows: double-click `desktop.bat`). The app opens with fictional listings. Choose a model, budget, mileage, interior and optional requirements, then click **Preview with sample cars**. Select a row to inspect transport, distance, wheels and the evidence behind HW4 and matrix headlights.
+
+For live inventory, open **Location & alerts**, enter your US ZIP and state, and use **Open setup browser** to verify the Tesla page. Close that Chrome window, then click **Start live monitoring**. Alerts appear in the window. For phone alerts choose **Telegram + window** and enter your bot token and chat ID, or use credentials already in your local `.env`. Credentials typed into the window last for the session. Keep YRadar open while monitoring. **Stop monitoring** finishes the current scan.
+
+The desktop uses one budget across models and trims. In transport-inclusive mode, listings with an unknown fee are provisional and can be hidden. Each distinct search keeps its own local history and pending alerts under `.yradar-local/`. Outside the example ZIP, enter both origin coordinates to enable distance-based estimates. Live scans need system Chrome. On Linux the desktop also needs Tkinter (often packaged as `python3-tk`).
+
 ## Quick start
 
 Requires Python 3.10+ and Google Chrome.

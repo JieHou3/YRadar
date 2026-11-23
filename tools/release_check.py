@@ -10,7 +10,7 @@ ROOT_FILES = {
     'CONTRIBUTING.md', 'SECURITY.md', 'CHANGELOG.md', '.env.example', '.gitignore',
     'requirements.txt', 'config.py', 'database.py', 'monitor.py', 'notifier.py',
     'geo.py', 'city_coordinates.py', 'vin_hw.py', 'vehicle_tiers.py',
-    'warmup_tesla.py', 'warmup.bat', 'start.bat', 'start.sh', 'demo.py',
+    'warmup_tesla.py', 'warmup.bat', 'start.bat', 'start.sh', 'demo.py', 'desktop.py', 'buyer_search.py', 'desktop.bat',
 }
 DIRECTORIES = {'docs': {'.md'}, 'tests': {'.py'}, 'fetchers': {'.py'},
                'tools': {'.py'}, '.github': {'.yml', '.yaml', '.md'},
@@ -34,6 +34,8 @@ def public_files():
             continue
         if len(relative.parts) == 1 and path.name in ROOT_FILES:
             files.append(path)
+        elif relative.as_posix() == 'assets/desktop-preview.png':
+            files.append(path)
         elif relative.parts[0] in DIRECTORIES and path.suffix in DIRECTORIES[relative.parts[0]]:
             files.append(path)
     return sorted(files)
@@ -43,6 +45,10 @@ def audit(files):
     errors = []
     for path in files:
         relative = path.relative_to(ROOT).as_posix()
+        if relative == 'assets/desktop-preview.png':
+            if not path.read_bytes().startswith(b'\x89PNG\r\n\x1a\n'):
+                errors.append(f'{relative}: expected a PNG screenshot')
+            continue
         content = path.read_text(encoding='utf-8-sig')
         for label, pattern in PATTERNS.items():
             if pattern.search(content):

@@ -207,6 +207,9 @@ def build_notification_text(vehicle, status_type='new', old_price=None, matcher=
         else:
             title = f"🚗 <b>New listing</b>{tail}"
         price_text = f"• Price: {_price_html(vehicle)}"
+    elif status_type == 'match':
+        title = f"<b>Now matches your search</b>{tail}"
+        price_text = f"• Price: {_price_html(vehicle)}"
     elif status_type == 'relist':
         title = f"🔄 <b>Relisted</b>: {tier_label(tier) or 'listing'}{tail}"
         price_text = f"• Price: {_price_html(vehicle)}"

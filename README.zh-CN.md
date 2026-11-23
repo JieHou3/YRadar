@@ -22,6 +22,16 @@ YRadar 定时查看 Tesla 官方二手库存，把车辆页面证据和按车型
 
 ![扫描 Tesla 官方二手库存，分析车源配置，再发送车源变化提醒。扫描不完整时保护已有记录并重试。](assets/flow-overview.zh-CN.svg)
 
+## 桌面应用
+
+![桌面演示展示筛选条件、两条虚构匹配结果和 Model Y 的硬件判断依据](assets/desktop-preview.png)
+
+按下面的步骤安装依赖后运行 `python desktop.py`。Windows 也可双击 `desktop.bat`。首次打开会看到虚构车源。选择车型、预算、里程、内饰和必选配置后，点击 **Preview with sample cars** 预览匹配结果。点选车源可查看运费、距离、轮毂，以及 HW4 和矩阵大灯的判断依据。
+
+在 **Location & alerts** 填写美国 ZIP 和州，点击 **Open setup browser** 确认 Tesla 页面可正常打开。关闭该 Chrome 窗口，点击 **Start live monitoring** 开始监控。提醒会显示在窗口里。如需手机推送，选择 **Telegram + window** 并填写自己的机器人令牌和聊天 ID，也可沿用本地 `.env` 凭据。窗口内填写的凭据仅用于本次运行。监控时保持窗口打开，点击 **Stop monitoring** 会在当前扫描结束后停止。
+
+桌面版用同一个预算匹配所选车型和配置。开启含运费预算后，未知运费的车源可保留待确认，也可排除。不同搜索条件的库存记录和待发提醒分别保存在 `.yradar-local/`。示例 ZIP 以外的用户可填写起点经纬度启用距离估算。在线扫描需要本机 Chrome，Linux 桌面还需安装 Tkinter（通常为 `python3-tk`）。
+
 ## 快速开始
 
 需要 Python 3.10+ 和 Google Chrome。

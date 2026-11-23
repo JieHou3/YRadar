@@ -28,3 +28,5 @@ IMPLEMENTATION_PLAN.md
 # Unreviewed legacy reference images are not part of the public package.
 assets/headlight_low_beam.png
 assets/headlight_high_beam.png
+
+.yradar-local/

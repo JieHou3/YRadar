@@ -16,7 +16,7 @@ from config import (
     TESLA_MIN_YEAR, MAX_MODEL_YEAR, TARGET_COORDS, CURRENT_DIR, CDP_VISIBLE,
     TESLA_DETAIL_VERIFY_DELAY_SECS, TESLA_DETAIL_VERIFY_PAUSE_SECS,
     TESLA_FAVORITE_MAX_PRICE, TESLA_FOCUS_MAX_PRICE, TESLA_MODELS,
-    BASE_MAX_PRICE, TESLA_REGION,
+    BASE_MAX_PRICE, TESLA_REGION, BUYER_SEARCH,
 )
 from vehicle_tiers import should_store_tesla, classify_tesla_tier, net_price
 from vin_hw import model_year_from_vin, assess_hw4, assess_matrix_headlights
@@ -48,6 +48,10 @@ TESLA_CRAWL_TIERS = (
         'price_cap': BASE_MAX_PRICE,
     },
 )
+
+if BUYER_SEARCH:
+    TESLA_CRAWL_TIERS = ({'label': 'Your search', 'query_extra': '', 'price_cap': BUYER_SEARCH.budget},)
+
 
 class TeslaFetcher(BaseFetcher):
     PAGE_SIZE = 24  # Tesla inventory API returns at most 24 cars per page
@@ -183,6 +187,9 @@ class TeslaFetcher(BaseFetcher):
         """Build one paginated request envelope"""
         q = json.loads(json.dumps(base_envelope))
         inner = q.setdefault('query', {})
+        if BUYER_SEARCH:
+            inner.pop('paymentRange', None)
+            inner.pop('PaymentType', None)
         self._apply_year_filter(inner)
         inner['Odometer'] = f"0,{MAX_MILEAGE}"
         if model_code:
@@ -696,10 +703,10 @@ class TeslaFetcher(BaseFetcher):
                 if year < TESLA_MIN_YEAR:
                     stats['year_low'] += 1
                     continue
-                if mileage > MAX_MILEAGE:
+                if not BUYER_SEARCH and mileage > MAX_MILEAGE:
                     stats['mileage_high'] += 1
                     continue
-                if TESLA_FETCH_MAX_PRICE is not None and price > TESLA_FETCH_MAX_PRICE:
+                if not BUYER_SEARCH and TESLA_FETCH_MAX_PRICE is not None and price > TESLA_FETCH_MAX_PRICE:
                     stats['price_high'] += 1
                     continue
 

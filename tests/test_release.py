@@ -9,6 +9,7 @@ class ReleaseTests(unittest.TestCase):
     def test_private_artifacts_and_unknown_images_are_not_exported(self):
         names = {p.relative_to(release_check.ROOT).as_posix() for p in release_check.public_files()}
         self.assertIn('.env.example', names)
+        self.assertIn('assets/desktop-preview.png', names)
         self.assertIn('README.zh-CN.md', names)
         self.assertNotIn('.env', names)
         self.assertNotIn('vehicles.db', names)

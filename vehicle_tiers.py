@@ -3,7 +3,7 @@ from config import (
     HW4_MAX_PRICE,
     FOCUS_MAX_PRICE,
     WATCH_MAX_PRICE,
-    BASE_MAX_PRICE,
+    BASE_MAX_PRICE, BUYER_SEARCH,
     ALERT_TIERS,
 )
 from vin_hw import is_hw4_vehicle
@@ -66,6 +66,8 @@ def classify_tesla_tier(vehicle):
     'other'  non-HW4 within HW4_MAX_PRICE (stored, not pushed)
     None     drop
     """
+    if BUYER_SEARCH:
+        return 'buyer' if BUYER_SEARCH.match(vehicle) else None
     vin = vehicle.get('vin') or ''
     net = net_price(vehicle)
     model = vehicle.get('model_code') or vehicle.get('model') or 'my'
@@ -90,12 +92,12 @@ def classify_tesla_tier(vehicle):
 
 
 def should_store_tesla(vehicle):
-    return classify_tesla_tier(vehicle) is not None
+    return BUYER_SEARCH is not None or classify_tesla_tier(vehicle) is not None
 
 
 def push_tier(vehicle):
     tier = classify_tesla_tier(vehicle)
-    if tier in ALERT_TIERS:
+    if tier == 'buyer' or tier in ALERT_TIERS:
         return tier
     return None
 
@@ -106,6 +108,7 @@ def tier_label(tier):
         'focus': 'Long Range AWD / HW4',
         'hw4': 'HW4',
         'other': 'Other',
+        'buyer': 'Your search',
     }.get(tier or '', '')
 
 

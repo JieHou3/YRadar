@@ -11,7 +11,7 @@ if hasattr(sys.stderr, 'reconfigure'):
     sys.stderr.reconfigure(encoding='utf-8')
 
 from config import (
-    NEARBY_RADIUS, CURRENT_DIR, REVIEW_SLOTS, LOOP_SLEEP_CHUNK_SECS,
+    NEARBY_RADIUS, STATE_DIR, BUYER_SEARCH, REVIEW_SLOTS, LOOP_SLEEP_CHUNK_SECS,
     TESLA_FAIL_BACKOFF_MINS, next_tesla_scan_at,
     TESLA_NEAR_MAX_FEE, TESLA_INTERVAL_MINS, TESLA_MODELS,
     INCLUDE_TRANSPORT_IN_SORT, PUSH_UNKNOWN_TRANSPORT,
@@ -29,7 +29,7 @@ from notifier import (
 )
 from vehicle_tiers import push_tier, classify_tesla_tier
 
-REVIEW_STATE_FILE = os.path.join(CURRENT_DIR, 'last_review_state.json')
+REVIEW_STATE_FILE = os.path.join(STATE_DIR, 'last_review_state.json')
 
 
 def _review_slot_key(hour, minute):
@@ -138,6 +138,8 @@ def _transport_fee_int(vehicle):
 
 
 def _should_realtime_push(vehicle):
+    if BUYER_SEARCH:
+        return BUYER_SEARCH.match(vehicle)
     if push_tier(vehicle) is None:
         return False
     fee = _transport_fee_int(vehicle)
@@ -228,16 +230,24 @@ def run_scan(fetcher, on_fetch_done=None):
         for v in vehicles:
             dist, nearby = calculate_distance(v.get('dealer_address') or '')
             v['distance'] = dist
+            if BUYER_SEARCH and v.get('distance_miles') is None and dist is not None:
+                v['distance_miles'] = dist
+                v['distance_source'] = 'city_coordinates'
             v['is_nearby'] = bool(nearby and dist is not None and dist <= NEARBY_RADIUS)
             v['matched_dealer_name'] = 'Tesla Inc. (official)'
             v['match_score'] = 1.0
             v['chain_warning'] = False
             active_vins.add(v['vin'])
-            counters['matched'] += 1
+            eligible = _should_realtime_push(v)
+            if not BUYER_SEARCH or eligible:
+                counters['matched'] += 1
             should_notify, status, old_price = is_new_or_price_dropped(
-                v, queue_alert=_should_realtime_push(v),
+                v, queue_alert=eligible,
+                match_rule=BUYER_SEARCH.match if BUYER_SEARCH else None,
             )
             if not should_notify:
+                continue
+            if BUYER_SEARCH and not eligible:
                 continue
             if status == 'new':
                 counters['new'] += 1
@@ -245,9 +255,9 @@ def run_scan(fetcher, on_fetch_done=None):
                 counters['price_drop'] += 1
             elif status == 'relist':
                 counters['relist'] += 1
-            else:
+            elif status != 'match':
                 continue
-            if _should_realtime_push(v):
+            if eligible:
                 counters['pending_notifies'].append((v, status, old_price))
             elif classify_tesla_tier(v) == 'other':
                 _print_skip_console('outside alert criteria', v, status, old_price)
@@ -323,23 +333,27 @@ def run_scan(fetcher, on_fetch_done=None):
     return fetch_ok
 
 
-def run_loop():
+def run_loop(stop_event=None):
     init_db()
     fetcher = TeslaFetcher()
     last_scan_at = None
     in_backoff = False
     print(f"[sys] YRadar — Tesla official used inventory ({', '.join(TESLA_MODELS)})")
-    print(
-        f"[sys] Scan every {TESLA_INTERVAL_MINS} min | "
-        f"digest {REVIEW_SLOTS[0][0]:02d}:{REVIEW_SLOTS[0][1]:02d} / "
-        f"{REVIEW_SLOTS[1][0]:02d}:{REVIEW_SLOTS[1][1]:02d}"
-    )
+    if BUYER_SEARCH:
+        print(f"[sys] Scan every {TESLA_INTERVAL_MINS} minutes.")
+    else:
+        print(
+            f"[sys] Scan every {TESLA_INTERVAL_MINS} min | "
+            f"digest {REVIEW_SLOTS[0][0]:02d}:{REVIEW_SLOTS[0][1]:02d} / "
+            f"{REVIEW_SLOTS[1][0]:02d}:{REVIEW_SLOTS[1][1]:02d}"
+        )
     print(f"[sys] 403 / Access Denied → pause {TESLA_FAIL_BACKOFF_MINS} min, then resume.")
     print("[sys] Ctrl+C to exit.")
 
-    while True:
+    while stop_event is None or not stop_event.is_set():
         flush_pending_alerts()
-        check_and_trigger_daily_review(force=False)
+        if not BUYER_SEARCH:
+            check_and_trigger_daily_review(force=False)
         if should_run_tesla_scan(last_scan_at, in_backoff=in_backoff):
             was_backoff = in_backoff
 
@@ -366,7 +380,10 @@ def run_loop():
             last_scan_at = datetime.datetime.now()
         sleep_s = compute_tesla_sleep_seconds(last_scan_at, in_backoff=in_backoff)
         chunk = min(LOOP_SLEEP_CHUNK_SECS, max(1, int(sleep_s) or LOOP_SLEEP_CHUNK_SECS))
-        time.sleep(chunk)
+        if stop_event is None:
+            time.sleep(chunk)
+        else:
+            stop_event.wait(chunk)
 
 
 def main():

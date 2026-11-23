@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Search official used inventory in the desktop app and preview filters with fictional listings.
+- Receive alerts when a previously observed car first meets your criteria, including after a transport fee change.
+- 桌面版支持自定义购车条件和离线预览。已见车源因运费变化首次进入预算时，也会触发提醒。
+
 ## 0.1.0 — Initial public package
 
 - Tesla official used Model Y and Model 3 inventory, with deeper Model Y hardware heuristics.

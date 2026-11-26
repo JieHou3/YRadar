@@ -40,6 +40,14 @@ DEMO_VEHICLES = [
 ]
 
 
+DEMO_NEW_VEHICLES = [
+    dict(DEMO_VEHICLES[0], vin='DEMO-NEW-Y', year=2026, price=37990, mileage=1200,
+         transport_fee=None, inventory_kind='Demo vehicle', hw4_status='unknown'),
+    dict(DEMO_VEHICLES[1], vin='DEMO-NEW-3', year=2026, price=36990, mileage=None,
+         transport_fee=None, inventory_kind='New vehicle', hw4_status='unknown'),
+]
+
+
 def run_demo():
     print('YRadar | OFFLINE DEMO | All vehicles, prices, and configurations are fictional.\n')
     for vehicle in copy.deepcopy(DEMO_VEHICLES):

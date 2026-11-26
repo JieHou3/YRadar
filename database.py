@@ -30,6 +30,7 @@ def init_db():
     columns = [col[1] for col in cursor.fetchall()]
 
     migrations = {
+        'inventory_kind': 'ALTER TABLE vehicles ADD COLUMN inventory_kind TEXT',
         'is_active': "ALTER TABLE vehicles ADD COLUMN is_active INTEGER DEFAULT 1",
         'sold_at': "ALTER TABLE vehicles ADD COLUMN sold_at TIMESTAMP",
         'color_ext': "ALTER TABLE vehicles ADD COLUMN color_ext TEXT",
@@ -118,7 +119,7 @@ _DETAIL_FIELDS = (
     'distance_miles', 'distance_source', 'clean_status',
     'hw4_status', 'hw4_source', 'hw4_reason',
     'matrix_status', 'matrix_source', 'matrix_reason',
-    'range_unit', 'tire_size',
+    'range_unit', 'tire_size', 'inventory_kind',
 )
 
 

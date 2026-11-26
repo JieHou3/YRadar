@@ -2,7 +2,7 @@
 
 ![YRadar banner](assets/yradar-banner.svg)
 
-**Real-time configuration intelligence and alerts for Tesla's official used Model Y and Model 3 inventory.**
+**Inventory alerts and configuration evidence for Tesla's official Model Y and Model 3 listings.**
 
 [中文说明](README.zh-CN.md) · [Buyer's guide](docs/buyers-guide.md) · [Filters and evidence](docs/filters.md) · [Contributing](CONTRIBUTING.md)
 
@@ -31,6 +31,14 @@ After installing the dependencies below, run `python desktop.py` (Windows: doubl
 For live inventory, open **Location & alerts**, enter your US ZIP and state, and use **Open setup browser** to verify the Tesla page. Close that Chrome window, then click **Start live monitoring**. Alerts appear in the window. For phone alerts choose **Telegram + window** and enter your bot token and chat ID, or use credentials already in your local `.env`. Credentials typed into the window last for the session. Keep YRadar open while monitoring. **Stop monitoring** finishes the current scan.
 
 The desktop uses one budget across models and trims. In transport-inclusive mode, listings with an unknown fee are provisional and can be hidden. Each distinct search keeps its own local history and pending alerts under `.yradar-local/`. Outside the example ZIP, enter both origin coordinates to enable distance-based estimates. Live scans need system Chrome. On Linux the desktop also needs Tkinter (often packaged as `python3-tk`).
+
+### New & Demo (experimental)
+
+In **Criteria**, select **New & Demo (experimental)** and set a cash-price budget. Turn off the clean-history and transport-budget filters if selected. **Preview with sample cars** works offline. To watch for listings and price drops, enter your US ZIP in **Location & alerts** and click **Start live monitoring**. Alerts appear in the window and can also go to Telegram. Year and mileage filters apply to values Tesla supplies.
+
+Chrome loads the official inventory page on each scan. This mode reads the first matching response for each selected model and retains the last observed listings. It reports zero inventory only when Tesla's response contains an empty list and an explicit zero count. A blocked page, timeout, or unrecognized response leaves the scan incomplete. Prices use the cash figure reported in the response, with additional fees left for Tesla's checkout.
+
+On November 25, 2026, a manual check opened both US new-inventory pages and found no listings in the checked area. Automated parsing and alerts were exercised with synthetic records. The first live scan with actual listings is still pending.
 
 ## Quick start
 
@@ -105,7 +113,7 @@ The editable starting profile is **Long Range AWD / White Interior / Clean**, mo
 
 ## Scope and responsible use
 
-YRadar searches **Tesla official used inventory only**. It has no TrueCar integration. Use a reasonable interval and comply with Tesla's applicable terms and access controls. Tesla may change its pages and endpoints at any time.
+YRadar searches **Tesla official inventory** for Model Y and Model 3. Use a reasonable interval and comply with Tesla's applicable terms and access controls. Tesla may change its pages and endpoints at any time.
 
 This unofficial personal-research tool is not affiliated with Tesla. Hardware labels, fee estimates, inventory state, and buyer notes can be wrong or stale. Verify the vehicle and purchase terms yourself.
 

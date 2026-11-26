@@ -6,6 +6,9 @@ import math
 import re
 
 
+NEW_INVENTORY = 'New & Demo (experimental)'
+
+
 @dataclass(frozen=True)
 class BuyerSearch:
     model: str = 'Both models'
@@ -22,8 +25,17 @@ class BuyerSearch:
     interval: int = 15
     lat: str = ''
     lng: str = ''
+    inventory: str = 'Used'
+
+    @property
+    def watches_new(self):
+        return self.inventory == NEW_INVENTORY
 
     def __post_init__(self):
+        if self.inventory not in ('Used', NEW_INVENTORY):
+            raise ValueError('Choose a listed inventory type.')
+        if self.watches_new and (self.clean or self.include_fee):
+            raise ValueError('New & Demo uses listed cash price. Turn off clean history and transport budget filters.')
         if self.model not in ('Both models', 'Model Y', 'Model 3') or self.interior not in ('Any', 'Black', 'White'):
             raise ValueError('Choose a listed model and interior.')
         if not re.fullmatch(r'[0-9]{5}', self.zip_code) or not re.fullmatch(r'[A-Z]{2}', self.region):
@@ -39,9 +51,14 @@ class BuyerSearch:
             raise ValueError('Enter valid latitude and longitude.')
 
     def match(self, v):
+        if bool(v.get('inventory_kind')) != self.watches_new:
+            return False
         if self.model != 'Both models' and v.get('model') != self.model:
             return False
-        if (v.get('year') or 0) < self.year or v.get('mileage') is None or v['mileage'] > self.mileage:
+        year, mileage = v.get('year'), v.get('mileage')
+        if not self.watches_new and (year is None or mileage is None):
+            return False
+        if (year is not None and year < self.year) or (mileage is not None and mileage > self.mileage):
             return False
         trim = (v.get('trim') or '').lower().replace('-', ' ')
         if self.awd and 'awd' not in trim and 'all wheel drive' not in trim:
@@ -66,6 +83,8 @@ class BuyerSearch:
     def state_key(self):
         criteria = asdict(self)
         del criteria['interval']
+        if not self.watches_new:
+            del criteria['inventory']
         return sha256(json.dumps(criteria, sort_keys=True).encode()).hexdigest()[:24]
 
     def environment(self):

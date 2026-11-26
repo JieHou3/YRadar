@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Added an opt-in experimental New & Demo inventory mode for Model Y and Model 3. It tracks new matches and cash-price drops and distinguishes a confirmed empty snapshot from a failed scan.
+- 新增 Model Y 和 Model 3 新车与演示车实验模式，支持新出现车源与现金价降价提醒，并区分零库存与扫描失败。
+
 - Search official used inventory in the desktop app and preview filters with fictional listings.
 - Receive alerts when a previously observed car first meets your criteria, including after a transport fee change.
 - 桌面版支持自定义购车条件和离线预览。已见车源因运费变化首次进入预算时，也会触发提醒。

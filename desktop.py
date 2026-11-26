@@ -10,7 +10,7 @@ import threading
 import webbrowser
 from urllib.parse import urlsplit
 
-from buyer_search import BuyerSearch
+from buyer_search import BuyerSearch, NEW_INVENTORY
 
 ROOT = Path(__file__).resolve().parent
 LOCAL = ROOT / '.yradar-local'
@@ -54,8 +54,8 @@ def app():
 
     window = tk.Tk()
     window.title('YRadar | Inventory watch')
-    window.geometry('1100x700')
-    window.minsize(940, 650)
+    window.geometry('1100x760')
+    window.minsize(940, 720)
     style = ttk.Style(window)
     style.theme_use('clam')
     style.configure('.', font=('Segoe UI', 10), background='#f3f6fa', foreground='#20334b')
@@ -74,7 +74,7 @@ def app():
     hdr.pack(fill='x')
     tk.Label(hdr, text='YRadar', bg='#122441', fg='#6be5cd',
              font=('Segoe UI', 23, 'bold')).pack(side='left')
-    tk.Label(hdr, text='Official used inventory   /   Model Y + Model 3',
+    tk.Label(hdr, text='Official Tesla inventory   /   Model Y + Model 3',
              bg='#122441', fg='white', padx=15).pack(side='left')
     phase = tk.StringVar(value='Offline preview')
     tk.Label(hdr, textvariable=phase, bg='#122441', fg='#bfece6').pack(side='right')
@@ -109,6 +109,7 @@ def app():
         form[key] = tk.BooleanVar(value=getattr(saved, key))
         ttk.Checkbutton(frame, text=label, variable=form[key]).pack(anchor='w')
 
+    field(filters, 'inventory', 'Inventory', ('Used', NEW_INVENTORY), width=27)
     field(filters, 'model', 'Model', ('Both models', 'Model Y', 'Model 3'))
     field(filters, 'budget', 'Maximum price (USD)')
     field(filters, 'mileage', 'Maximum mileage (mi)')
@@ -198,6 +199,15 @@ def app():
         if dist is None:
             dist = v.get('distance')
         miles = f'{dist:.0f} mi straight-line' if dist is not None else 'distance unknown'
+        if active.watches_new:
+            year = v.get('year') or 'Year unknown'
+            details.set(
+                f"{year} {v['model']}  |  {v.get('trim') or 'Trim unknown'}\n"
+                f"{v.get('inventory_kind')}  |  {v.get('dealer_address') or 'Location unknown'}\n"
+                "Listed cash price excludes fees not shown in the inventory response."
+            )
+            link.configure(state='disabled' if preview else 'normal')
+            return
         details.set('\n'.join([
             f"{v['year']} {v['model']}  ·  {v.get('trim') or 'Trim unknown'}",
             f"Sticker + transport: {total}  ·  {v.get('transport_fee_source') or 'unknown source'}",
@@ -222,10 +232,18 @@ def app():
     def refresh():
         nonlocal rows
         try:
-            source = DEMO_VEHICLES if preview else read_listings(active)
+            if preview:
+                source = DEMO_VEHICLES
+                if active.watches_new:
+                    from demo import DEMO_NEW_VEHICLES
+                    source = DEMO_NEW_VEHICLES
+            else:
+                source = read_listings(active)
         except sqlite3.OperationalError as error:
             status.set(f'Waiting for inventory database: {error}')
             return
+        table.heading('Sticker', text='Cash price' if active.watches_new else 'Sticker')
+        table.heading('Transport', text='Listing type' if active.watches_new else 'Transport')
         previous = table.selection()
         rows = {v['vin']: v for v in source if active.match(v)}
         table.delete(*table.get_children())
@@ -236,8 +254,11 @@ def app():
             fee_text = 'Unknown' if fee is None else f'${fee:,.0f}'
             if fee is not None and v.get('transport_fee_status') == 'estimated':
                 fee_text = '~' + fee_text
-            table.insert('', 'end', iid=key, values=(f"{v['year']} {v['model']}",
-                         f"${v['price']:,.0f}", fee_text, f"{v['mileage']:,}", v.get('hw4_status') or 'unknown'))
+            year = v.get('year') or '?'
+            mileage = f"{v['mileage']:,}" if v.get('mileage') is not None else 'Unknown'
+            listing_type = v.get('inventory_kind') if active.watches_new else fee_text
+            table.insert('', 'end', iid=key, values=(f"{year} {v['model']}",
+                         f"${v['price']:,.0f}", listing_type, mileage, v.get('hw4_status') or 'unknown'))
         summary.set(f"{'Sample' if preview else 'Last observed'} matches   ·   {len(rows)}")
         if rows:
             table.selection_set(previous[0] if previous and previous[0] in rows else table.get_children()[0])
@@ -295,7 +316,13 @@ def app():
         if proc is not None or prep_process is not None:
             return
         try:
-            env = {**os.environ, **criteria().environment()}
+            search = criteria()
+            if search.watches_new:
+                from fetchers.new_inventory import inventory_url
+                model = search.environment()['TESLA_MODELS'].split(',')[0]
+                webbrowser.open(inventory_url(model, search.zip_code))
+                return
+            env = {**os.environ, **search.environment()}
             prep_process = subprocess.Popen([sys.executable, str(ROOT/'warmup_tesla.py')], cwd=ROOT,
                                             env=env, creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
         except (ValueError, OSError) as error:
@@ -358,7 +385,8 @@ def app():
             log.configure(state='disabled')
             if '[notify]' in item:
                 latest.set('Latest alert  ·  ' + item.partition('[notify]')[2].strip())
-            if '[notify]' in item or ' done in ' in item or '[alert]' in item:
+            if ('[notify]' in item or '[alert]' in item or item.startswith('[new inventory]')
+                    or (' done in ' in item and not active.watches_new)):
                 status.set(item[:145])
             if ' done in ' in item:
                 refresh()

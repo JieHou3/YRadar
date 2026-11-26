@@ -176,6 +176,18 @@ def build_notification_text(vehicle, status_type='new', old_price=None, matcher=
     price = vehicle['price']
     mileage = vehicle['mileage']
     url = vehicle['url']
+    inventory_kind = vehicle.get('inventory_kind')
+    if inventory_kind:
+        heading = 'Cash price drop' if status_type == 'price_drop' else 'New inventory match'
+        previous = f'\nPrevious cash price: ${float(old_price):,.2f}' if status_type == 'price_drop' and old_price is not None else ''
+        mileage_label = f'{mileage:,} mi' if mileage is not None else 'Unknown'
+        return (
+            f'<b>{heading}</b> ({_e(source)})\n'
+            f'{_format_vehicle_title(vehicle)}\nListing: {_e(inventory_kind)}\n'
+            f'Listed cash price: <b>${price:,.2f}</b>{previous}\n'
+            f'Mileage: {mileage_label}\nLocation: {_e(vehicle.get("dealer_address"))}\n'
+            f'<a href="{_e(url)}">Open Tesla inventory</a>'
+        )
     color_ext = vehicle.get('color_ext') or 'n/a'
     color_int = vehicle.get('color_int') or 'n/a'
     accident_history = vehicle.get('accident_history') or 'n/a'
@@ -295,7 +307,8 @@ def send_notification(vehicle, status_type='new', old_price=None, matcher=None):
     vin = vehicle.get('vin') or 'unknown'
     tier = push_tier(vehicle) or vehicle.get('push_tier')
 
-    print(f"\n[notify] {status_type} VIN {vin} ({tier or '—'})")
+    identifier = vehicle.get('inventory_kind') or f'VIN {vin}'
+    print(f"\n[notify] {status_type} {identifier} ({tier or '—'})")
     return _deliver_message(telegram_text, preview=True)
 
 

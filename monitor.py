@@ -289,7 +289,7 @@ def run_scan(fetcher, on_fetch_done=None):
             if code not in TESLA_MODELS:
                 skip_miss_vins.add(row['vin'])
 
-        if fetch_ok:
+        if fetch_ok and not (BUYER_SEARCH and BUYER_SEARCH.watches_new):
             newly_sold = update_active_status(
                 source_name, active_vins, skip_miss_vins=skip_miss_vins or None,
                 notification_predicate=_should_realtime_push,
@@ -309,7 +309,7 @@ def run_scan(fetcher, on_fetch_done=None):
                 counters['sold'] += 1
                 pending_sold.append((v, 'sold', None))
             counters['pending_notifies'].extend(pending_sold)
-        else:
+        elif not fetch_ok:
             print(
                 f"[{label}] Incomplete fetch — stored {len(vehicles)} rows; "
                 f"skip sold/miss logic this round."
@@ -335,10 +335,16 @@ def run_scan(fetcher, on_fetch_done=None):
 
 def run_loop(stop_event=None):
     init_db()
-    fetcher = TeslaFetcher()
+    watches_new = BUYER_SEARCH is not None and BUYER_SEARCH.watches_new
+    if watches_new:
+        from fetchers.new_inventory import NewInventoryFetcher
+        fetcher = NewInventoryFetcher()
+    else:
+        fetcher = TeslaFetcher()
     last_scan_at = None
     in_backoff = False
-    print(f"[sys] YRadar — Tesla official used inventory ({', '.join(TESLA_MODELS)})")
+    scope = 'New & Demo (experimental)' if watches_new else 'used inventory'
+    print(f"[sys] YRadar — Tesla official {scope} ({', '.join(TESLA_MODELS)})")
     if BUYER_SEARCH:
         print(f"[sys] Scan every {TESLA_INTERVAL_MINS} minutes.")
     else:
@@ -371,8 +377,8 @@ def run_loop(stop_event=None):
                     send_system_alert(
                         f"[{datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}] "
                         f"Scan incomplete ({fetcher.last_fail_reason or 'fetch error'}). "
-                        f"Retrying in {TESLA_FAIL_BACKOFF_MINS} minutes. "
-                        "If a browser challenge persists, run warmup_tesla.py."
+                        f"Retrying in {TESLA_FAIL_BACKOFF_MINS} minutes."
+                        + ('' if watches_new else ' If a browser challenge persists, run warmup_tesla.py.')
                     )
 
             ok = run_scan(fetcher)
